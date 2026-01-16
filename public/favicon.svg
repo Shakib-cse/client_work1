@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D97757;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C96543;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#grad)"/>
+  
+  <!-- Sofa icon -->
+  <g fill="#FFFFFF">
+    <!-- Sofa base -->
+    <rect x="20" y="45" width="60" height="25" rx="3"/>
+    
+    <!-- Left armrest -->
+    <rect x="15" y="35" width="10" height="35" rx="2"/>
+    
+    <!-- Right armrest -->
+    <rect x="75" y="35" width="10" height="35" rx="2"/>
+    
+    <!-- Backrest -->
+    <rect x="25" y="30" width="50" height="20" rx="2"/>
+    
+    <!-- Cushion details -->
+    <line x1="40" y1="45" x2="40" y2="65" stroke="#D97757" stroke-width="2"/>
+    <line x1="60" y1="45" x2="60" y2="65" stroke="#D97757" stroke-width="2"/>
+    
+    <!-- Legs -->
+    <rect x="25" y="70" width="3" height="8" rx="1"/>
+    <rect x="72" y="70" width="3" height="8" rx="1"/>
+  </g>
+  
+  <!-- Crypto symbol -->
+  <circle cx="75" cy="25" r="12" fill="#FFFFFF"/>
+  <text x="75" y="30" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#D97757" text-anchor="middle">Ξ</text>
+</svg>

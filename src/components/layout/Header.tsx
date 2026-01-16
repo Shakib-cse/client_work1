@@ -1,0 +1,216 @@
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { ShoppingBag, User, Search, Menu, X, Wallet, LogOut, Copy, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useCart } from '@/context/CartContext';
+import { useWallet } from '@/context/WalletContext';
+import { SearchModal } from '@/components/layout/SearchModal';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+
+const navLinks = [
+  { name: 'Sofas', href: '/category/sofas' },
+  { name: 'Chairs', href: '/category/chairs' },
+  { name: 'Tables', href: '/category/tables' },
+  { name: 'Lighting', href: '/category/lighting' },
+  { name: 'Storage', href: '/category/storage' },
+  { name: 'Decor', href: '/category/decor' },
+];
+
+export const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { totalItems, setIsCartOpen } = useCart();
+  const { isConnected, address, connect, disconnect, ethBalance, usdcBalance, chainName } = useWallet();
+  const location = useLocation();
+
+  const copyAddress = () => {
+    if (address) {
+      navigator.clipboard.writeText(address);
+      toast.success('Address copied to clipboard!');
+    }
+  };
+
+  const viewOnEtherscan = () => {
+    if (address) {
+      window.open(`https://etherscan.io/address/${address}`, '_blank');
+    }
+  };
+
+  return (
+    <>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="container mx-auto px-4">
+          {/* Top bar */}
+          <div className="hidden md:flex items-center justify-between py-2 text-xs text-muted-foreground border-b border-border">
+            <span>Free delivery on orders over £150</span>
+            <div className="flex items-center gap-4">
+              <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
+              <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+              <Link to="/help" className="hover:text-foreground transition-colors">Help</Link>
+            </div>
+          </div>
+
+          {/* Main header */}
+          <div className="flex items-center justify-between h-16 md:h-20">
+            {/* Mobile menu button */}
+            <button
+              className="md:hidden p-2 -ml-2"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+
+            {/* Logo */}
+            <Link to="/" className="flex items-center">
+              <span className="font-display text-2xl md:text-3xl font-semibold tracking-tight">
+                LUXE<span className="text-primary">HOME</span>
+              </span>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className={cn(
+                    "text-sm font-medium transition-colors hover:text-primary relative group",
+                    location.pathname === link.href ? "text-primary" : "text-foreground"
+                  )}
+                >
+                  {link.name}
+                  <span className={cn(
+                    "absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full",
+                    location.pathname === link.href && "w-full"
+                  )} />
+                </Link>
+              ))}
+            </nav>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setIsSearchOpen(true)}
+              >
+                <Search className="w-5 h-5" />
+              </Button>
+              
+              {/* Wallet Button */}
+              {isConnected ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hidden md:flex items-center gap-2 text-xs max-w-md"
+                  asChild
+                >
+                  <Link to="/wallet">
+                    <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+                    <span className="font-mono">{ethBalance} ETH</span>
+                    <span className="text-muted-foreground font-mono">
+                      {address}
+                    </span>
+                  </Link>
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hidden md:flex"
+                  onClick={connect}
+                >
+                  <Wallet className="w-5 h-5" />
+                </Button>
+              )}
+
+              <Button variant="ghost" size="icon" asChild>
+                <Link to="/account">
+                  <User className="w-5 h-5" />
+                </Link>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                onClick={() => setIsCartOpen(true)}
+              >
+                <ShoppingBag className="w-5 h-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs rounded-full flex items-center justify-center font-medium">
+                    {totalItems}
+                  </span>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        <div
+          className={cn(
+            "md:hidden absolute top-full left-0 right-0 bg-background border-b border-border transition-all duration-300 overflow-hidden",
+            isMobileMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+          )}
+        >
+          <nav className="container mx-auto px-4 py-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.href}
+                className={cn(
+                  "block py-3 text-lg font-medium border-b border-border last:border-0 transition-colors",
+                  location.pathname === link.href ? "text-primary" : "text-foreground"
+                )}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <div className="pt-4 space-y-3">
+              {isConnected ? (
+                <Link
+                  to="/wallet"
+                  className="flex items-center justify-between py-3 text-lg font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="flex items-center gap-2">
+                    <Wallet className="w-5 h-5" />
+                    Wallet
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    {ethBalance} ETH
+                  </span>
+                </Link>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="w-full flex items-center gap-2"
+                  onClick={() => {
+                    connect();
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <Wallet className="w-4 h-4" />
+                  Connect Wallet
+                </Button>
+              )}
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      <SearchModal open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+    </>
+  );
+};
