@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
 
-const BACKEND_URL = 'http://localhost:5000/api/health';
+const BACKEND_URL = 'https://client-work2.vercel.app/api/health';
 const CHECK_INTERVAL = 2000; // Check every 2 seconds
 
 export const ServerConnectionCheck = ({ children }: { children: React.ReactNode }) => {
