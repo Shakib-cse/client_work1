@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
 
-const BACKEND_URL = 'https://client-work2.vercel.app/api/health';
+const BACKEND_URL = 'https://client-work2-three.vercel.app/api/health';
 const CHECK_INTERVAL = 2000; // Check every 2 seconds
 
 export const ServerConnectionCheck = ({ children }: { children: React.ReactNode }) => {
@@ -55,7 +55,7 @@ export const ServerConnectionCheck = ({ children }: { children: React.ReactNode 
               Waiting for backend server to start...
             </p>
             <p className="text-gray-500 text-sm">
-              Backend must be running on http://localhost:5000
+              Backend must be running in http://localhost:5000
             </p>
             <p className="text-gray-600 text-xs mt-4">
               Checking... (attempt {attempts})
