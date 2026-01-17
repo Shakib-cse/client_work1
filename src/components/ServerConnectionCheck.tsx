@@ -16,7 +16,7 @@ export const ServerConnectionCheck = ({ children }: { children: React.ReactNode 
       });
       
       if (response.ok) {
-        setIsConnected(true);
+        setIsConnected(true); 
         return true;
       }
       return false;
